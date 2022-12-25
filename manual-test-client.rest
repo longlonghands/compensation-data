@@ -1,0 +1,3 @@
+
+GET http://localhost:3000/compensation_data?salary[gte]=120000&location=Los+Angeles&sort=salary HTTP/1.1
+content-type: application/json
