@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { wait } from './../src/operations';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -13,9 +14,16 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    await wait(2000);
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!');
+  it('/compensation_data (sample 1)', async () => {
+    const resp = await request(app.getHttpServer()).get(
+      '/compensation_data?salary[gte]=12000&location=Los+Angeles&sort=salary',
+    );
+    expect(resp.status).toEqual(200);
+    expect(resp.body).toBeDefined();
+    expect(Array.isArray(resp.body)).toBeTruthy();
+    expect(resp.body.length > 1).toBeTruthy();
   });
 });
