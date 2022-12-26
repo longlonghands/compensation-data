@@ -1,3 +1,11 @@
+export interface Operator {
+  lt?: number | string;
+  lte?: number | string;
+  eq?: number | string;
+  gte?: number | string;
+  gt?: number | string;
+}
+
 export class Range {
   static readonly MAX_RANGE = 999999;
   static readonly MIN_RANGE = 0;
@@ -54,6 +62,35 @@ export class Range {
       return 0;
     } else {
       return -1;
+    }
+  }
+
+  compareWithOperator(op: Operator): boolean {
+    if (op.eq) {
+      if (typeof op.eq === 'string') {
+        op.eq = Number.parseInt(op.eq);
+      }
+      return this.compareWithNumber(op.eq) === 0;
+    } else if (op.lt) {
+      if (typeof op.lt === 'string') {
+        op.lt = Number.parseInt(op.lt);
+      }
+      return this.compareWithNumber(op.lt) < 0;
+    } else if (op.lte) {
+      if (typeof op.lte === 'string') {
+        op.lte = Number.parseInt(op.lte);
+      }
+      return this.compareWithNumber(op.lte) <= 0;
+    } else if (op.gt) {
+      if (typeof op.gt === 'string') {
+        op.gt = Number.parseInt(op.gt);
+      }
+      return this.compareWithNumber(op.gt) > 0;
+    } else if (op.gte) {
+      if (typeof op.gte === 'string') {
+        op.gte = Number.parseInt(op.gte);
+      }
+      return this.compareWithNumber(op.gte) >= 0;
     }
   }
 
